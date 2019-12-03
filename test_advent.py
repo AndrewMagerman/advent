@@ -3,7 +3,7 @@
 # For a mass of 1969, the fuel required is 654.
 # For a mass of 100756, the fuel required is 33583.
 from advent1 import fuel, fuel_with_fuel_mass_included
-from advent2 import turing
+from advent2 import turing, computer
 
 
 def test_fuel():
@@ -35,6 +35,9 @@ def test_turing_machine_multiply():
 def test_turing_machine_mystery():
     assert turing([1, 1, 1, 4, 99, 5, 6, 0, 99]) == [30, 1, 1, 4, 2, 5, 6, 0, 99]
 
+def test_computer():
+    assert computer(noun=12, verb=2) == 6730673
+    assert computer(noun=12, verb=2) == 6730673
 
 if __name__ == '__main__':
     pass

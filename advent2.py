@@ -43,17 +43,24 @@ def turing(state: List) -> List:
     return a.state
 
 
-if __name__ == '__main__':
-
+def computer(noun: int, verb: int) -> int:
     puzzle_state = [1, 0, 0, 3, 1, 1, 2, 3, 1, 3, 4, 3, 1, 5, 0, 3, 2, 9, 1, 19, 1, 19, 6, 23, 2, 6, 23, 27, 2, 27, 9,
                     31, 1, 5, 31, 35, 1, 35, 10, 39, 2, 39, 9, 43, 1, 5, 43, 47, 2, 47, 10, 51, 1, 51, 6, 55, 1, 5, 55,
                     59, 2, 6, 59, 63, 2, 63, 6, 67, 1, 5, 67, 71, 1, 71, 9, 75, 2, 75, 10, 79, 1, 79, 5, 83, 1, 10, 83,
                     87, 1, 5, 87, 91, 2, 13, 91, 95, 1, 95, 10, 99, 2, 99, 13, 103, 1, 103, 5, 107, 1, 107, 13, 111, 2,
                     111, 9, 115, 1, 6, 115, 119, 2, 119, 6, 123, 1, 123, 6, 127, 1, 127, 9, 131, 1, 6, 131, 135, 1, 135,
                     2, 139, 1, 139, 10, 0, 99, 2, 0, 14, 0]
+    puzzle_state[1] = noun
+    puzzle_state[2] = verb
+    return turing(puzzle_state)[0]
 
-    puzzle_state[1] = 12
-    puzzle_state[2] = 2
 
-    print(puzzle_state)
-    print(turing(puzzle_state))
+def task2(desired_output_puzzle_function: int) -> int:
+    for x in range(100):
+        for y in range(100):
+            if computer(noun=x, verb=y) == desired_output_puzzle_function:
+                return 100 * x + y
+
+
+if __name__ == '__main__':
+    print(task2(desired_output_puzzle_function=19690720))
