@@ -9,13 +9,22 @@ def isvalid(password: str):
     if not len(password) == 6:
         return False
 
-    if not single_pairf_ound(password):
+    if not pair_found(password):
         return False
 
     if not in_order(password):
         return False
 
-    return single_pairf_ound(password) & in_order(password)
+    return pair_found(password) & in_order(password) & at_least_one_pure_pair(password)
+
+
+def at_least_one_pure_pair(input: str):
+    c = countpairs(input)
+    for value in c.values():
+        if value == 1:
+            return True
+
+    return False
 
 
 def countpairs(input: str):
@@ -25,16 +34,20 @@ def countpairs(input: str):
     previous_char = 'X'
     for char in input:
         if char == previous_char:
-
             t = (previous_char, char,)
-            allpairs
+            if t not in allpairs:
+                allpairs[t] = 1
+            else:
+                allpairs[t] += 1
             c.update(t)
         previous_char = char
 
-    return c
+    print(c)
+    print(allpairs)
+    return allpairs
 
 
-def single_pairf_ound(input: str):
+def pair_found(input: str):
     c = Counter()
     previous_char = 'X'
     for char in input:
@@ -54,26 +67,32 @@ def in_order(input: str):
     return True
 
 
+def pair_counter(input: str):
+    e = Counter()
+    for a in pairwise(input):
+        x, y = a
+        if x == y:
+            e[a] += 1
+    return e
+
+
 def count_passwords():
     counter = 0
-    r = Counter()
+
     for a in range(156218, 652527):
         password = str(a)
         if isvalid(password):
             counter += 1
-            r.update([a])
-            print(a)
 
-    print(r)
-    print(len(r))
-    print(counter)
+    return counter
 
 
 if __name__ == '__main__':
     # print(pairfound("hallo"))
     # print(pairfound("asadfagasdfasdf"))
     # print(in_order('145434'))
-    # print(in_order('1123456'))
+    print(pair_counter('1123456'))
     # print(in_order('11923456'))
     # count_passwords()
-    print(countpairs("1112233"))
+    # print(countpairs("1112233"))
+    # print(at_least_one_pure_pair("1122222"))
