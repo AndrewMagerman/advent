@@ -1,4 +1,4 @@
-from typing import Tuple, Set
+from typing import Tuple, Set, List
 
 
 def next_position(pos: Tuple, direction: str) -> Tuple:
@@ -14,7 +14,7 @@ def next_position(pos: Tuple, direction: str) -> Tuple:
 initial = (0, 0,)
 
 
-def trajectory(input_string: str) -> Set[Tuple]:
+def trajectory(input_string: str) -> List[Tuple]:
     where_i_have_been = [initial]
 
     instructions = input_string.split(",")
@@ -25,20 +25,43 @@ def trajectory(input_string: str) -> Set[Tuple]:
         for u in range(distance):
             where_i_have_been.append(next_position(where_i_have_been[-1], direction))
 
-    return set(where_i_have_been)
+    return where_i_have_been
+
+
+def smallest(wire1: str, wire2: str, func) -> int:
+    t1 = trajectory(wire1)
+    t2 = trajectory(wire2)
+
+    intersection = common_nodes(t1, t2)
+
+    minimum = 10000000000000
+    for node in intersection:
+        minimum = min(minimum, func(t1, t2, node))
+
+    return minimum
+
+
+def common_nodes(trajectory1: List[Tuple], trajectory2: List[Tuple]) -> Set[Tuple]:
+    intersection = set(trajectory1) & set(trajectory2)
+    intersection.remove(initial)
+    return intersection
+
+
+def manhattan_distance(trajectory1: List[Tuple], trajectory2: List[Tuple], node: Tuple) -> int:
+    x, y = node
+    return abs(x - initial[0]) + abs(y - initial[1])
+
+
+def number_steps(trajectory1: List[Tuple], trajectory2: List[Tuple], node: Tuple) -> int:
+    return trajectory1.index(node) + trajectory2.index(node)
 
 
 def manhattan_distance_closest_intersection(wire1: str, wire2: str) -> int:
-    intersection = trajectory(wire1) & trajectory(wire2)
-    intersection.remove(initial)
-    print(intersection)
-    minimum_distance = 10000000000000
-    for x, y in intersection:
-        distance = abs(x - initial[0]) + abs(y - initial[1])
-        if distance < minimum_distance:
-            minimum_distance = distance
+    return smallest(wire1, wire2, manhattan_distance)
 
-    return minimum_distance
+
+def steps_closest(wire1: str, wire2: str) -> int:
+    return smallest(wire1, wire2, number_steps)
 
 
 if __name__ == '__main__':
@@ -51,3 +74,5 @@ if __name__ == '__main__':
     wire_2 = "L999,U148,L592,D613,L147,D782,R594,U86,R891,D448,R92,U756,R93,D763,L536,U906,L960,D988,L532,U66,R597,U120,L273,D32,R525,U628,L630,U89,L248,U594,R886,D544,L288,U380,L23,D191,L842,U394,L818,U593,L195,U183,L863,D456,L891,D653,R618,U314,L775,D220,R952,U960,R714,U946,L343,D873,L449,U840,R769,U356,L20,D610,L506,U733,R524,D450,L888,D634,R737,U171,R906,U369,L172,D625,L97,D437,R359,D636,R775,U749,L281,U188,R418,D437,R708,D316,L388,D717,R59,U73,R304,U148,L823,U137,R265,U59,R488,D564,R980,U798,L626,U47,L763,U858,L450,U663,R378,U93,L275,U472,L792,U544,R192,D979,L520,U835,L946,D615,L120,U923,L23,U292,R396,U605,L76,U813,L388,U500,L848,U509,L276,D538,R26,D806,R685,D319,R414,D989,L519,U603,R898,D477,L107,D828,R836,U432,L601,U888,L476,D974,L911,U122,L921,D401,L878,D962,L214,D913,L113,U418,R992,U844,L928,U534,L13,U457,L866,D208,L303,D732,L497,U673,R659,D639,R430,D301,L573,U373,L270,D901,L605,D935,R440,D183,R374,D883,L551,U771,R707,D141,R984,U346,R894,U1,R33,U492,R371,D631,R95,D62,L378,D343,R108,D611,L267,D871,L296,U391,R302,D424,R160,U141,R682,U949,R380,U251,L277,D404,R392,D210,L158,U896,R350,D891,L837,D980,R288,U597,L292,D639,L943,D827,L492,D625,L153,D570,R948,D855,L945,U840,L493,U800,L392,D438,R8,U966,R218,U597,R852,D291,L840,D831,L498,U846,R875,D244,R159,U243,R975,D246,R549,D304,R954,D123,R58,U5,L621,U767,R455,U550,R800,D417,R869,D184,L966,D51,L383,U132,L664,U220,L263,D307,R716,U346,L958,U84,L154,U90,L726,U628,L159,U791,L643,D652,L138,U577,R457,U655,L547,D441,L21"
 
     print(manhattan_distance_closest_intersection(wire_1, wire_2))
+
+    print(steps_closest(wire_1, wire_2))

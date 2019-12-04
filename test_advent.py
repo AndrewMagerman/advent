@@ -4,7 +4,7 @@
 # For a mass of 100756, the fuel required is 33583.
 from advent1 import fuel, fuel_with_fuel_mass_included
 from advent2 import turing, computer
-from advent3 import manhattan_distance_closest_intersection
+from advent3 import manhattan_distance_closest_intersection, steps_closest
 
 
 def test_fuel():
@@ -42,16 +42,25 @@ def test_computer():
     assert computer(noun=12, verb=2) == 6730673
 
 
-test_wire_1 = "R8,U5,L5,D3"
-test_wire_2 = "U7,R6,D4,L4"
+test_wire_1A = "R8,U5,L5,D3"
+test_wire_1B = "U7,R6,D4,L4"
+
+test_wire_2A = "R75,D30,R83,U83,L12,D49,R71,U7,L72"
+test_wire_2B = "U62,R66,U55,R34,D71,R55,D58,R83"
+
+test_wire_3A = "R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51"
+test_wire_3B = "U98,R91,D20,R16,D67,R40,U7,R15,U6,R7"
 
 
 def test_man_1():
-    assert manhattan_distance_closest_intersection(test_wire_1, test_wire_2) == 6
-    assert manhattan_distance_closest_intersection("R75,D30,R83,U83,L12,D49,R71,U7,L72",
-                                                   "U62,R66,U55,R34,D71,R55,D58,R83") == 159
-    assert manhattan_distance_closest_intersection("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51",
-                                                   "U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") == 135
+    assert manhattan_distance_closest_intersection(test_wire_1A, test_wire_1B) == 6
+    assert manhattan_distance_closest_intersection(test_wire_2A, test_wire_2B) == 159
+    assert manhattan_distance_closest_intersection(test_wire_3A, test_wire_3B) == 135
+
+def test_man_2():
+    assert steps_closest(test_wire_1A, test_wire_1B) == 30
+    assert steps_closest(test_wire_2A, test_wire_2B) == 610
+    assert steps_closest(test_wire_3A, test_wire_3B) == 410
 
 
 if __name__ == '__main__':
