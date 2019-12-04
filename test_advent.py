@@ -5,7 +5,7 @@
 from advent1 import fuel, fuel_with_fuel_mass_included
 from advent2 import turing, computer
 from advent3 import manhattan_distance_closest_intersection, steps_closest
-from advent4 import isvalid
+from advent4 import is_valid_part2
 
 
 def test_fuel():
@@ -64,15 +64,15 @@ def test_man_2():
     assert steps_closest(test_wire_3A, test_wire_3B) == 410
 
 def test_password_validator():
-    assert not isvalid("0")
-    assert not isvalid("00")
-    assert not isvalid("0000")
-    assert not isvalid("00000")
-    assert not isvalid("0000000")
-    assert not isvalid("123456")
-    assert  isvalid("111111")
-    assert not isvalid("223450")
-    assert not isvalid("123789")
+    assert not is_valid_part2("0")
+    assert not is_valid_part2("00")
+    assert not is_valid_part2("0000")
+    assert not is_valid_part2("00000")
+    assert not is_valid_part2("0000000")
+    assert not is_valid_part2("123456")
+    assert  is_valid_part2("111111")
+    assert not is_valid_part2("223450")
+    assert not is_valid_part2("123789")
 
 
 
