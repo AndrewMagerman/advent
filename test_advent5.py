@@ -35,7 +35,7 @@ def test_input():
 
 
 def test_mult1():
-    assert turing([1002, 4, 3, 4, 33]) == [2, 0, 0, 0, 99]
+    assert turing([1002, 4, 3, 4, 33]) == [1002, 4, 3, 4, 99]
 
 @pytest.fixture
 def prep():

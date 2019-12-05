@@ -55,13 +55,15 @@ class TuringMachine:
 
         self.state[mempos_ouput] = value_1 + value_2
 
-    def multiplying(self, listie):
-        mempos_value_1 = listie[0]
-        mempos_value_2 = listie[1]
-        mempos_ouput = listie[2]
+    def multiplying(self):
+        p = self.parameters()
 
-        value_1 = self.state[mempos_value_1]
-        value_2 = self.state[mempos_value_2]
+        mempos_value_1 = p[0][0]
+        mempos_value_2 = p[1][0]
+        mempos_ouput = p[2][0]
+
+        value_1 = self.state[mempos_value_1] if p[0][1] == 0 else p[0][0]
+        value_2 = self.state[mempos_value_2] if p[1][1] == 0 else p[1][0]
 
         self.state[mempos_ouput] = value_1 * value_2
 
