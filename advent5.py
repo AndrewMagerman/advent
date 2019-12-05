@@ -11,27 +11,38 @@ class TuringMachine:
         self.state = state
         self.current_read_position = read_position
         self.machine_input = None
+        self.output = None
 
     def operation(self):
         return self.state[self.current_read_position]
 
-    # def parameters_current_instruction(self) -> List:
-    #     ins = w[self.operation()]
-    #     listie = self.state[self.operation(): ins.parametercount + 1]
-    #     listie.reverse()
-    #
-    #     return listie
-
-    # @classmethod
     def adding(self, listie):
-        stack = self.parameters_current_instruction()
+        mempos_value_1 = listie[0]
+        mempos_value_2 = listie[1]
+        mempos_ouput = listie[2]
 
-        pointer_value_1 = listie[0]
-        pointer_value_2 = listie[1]
-        pointer_ouput = listie[2]
+        value_1 = self.state[mempos_value_1]
+        value_2 = self.state[mempos_value_2]
 
-        self.state[self.state[pointer_ouput]] = self.state[self.state[pointer_value_1]] + self.state[
-            self.state[pointer_value_2]]
+        self.state[mempos_ouput] = value_1 + value_2
+
+    def multiplying(self, listie):
+        mempos_value_1 = listie[0]
+        mempos_value_2 = listie[1]
+        mempos_ouput = listie[2]
+
+        value_1 = self.state[mempos_value_1]
+        value_2 = self.state[mempos_value_2]
+
+        self.state[mempos_ouput] = value_1 * value_2
+
+    def storeinput(self, listie):
+        mempos = listie[0]
+        self.state[mempos] = self.machine_input
+
+    def getoutput(self, listie):
+        mempos = listie[0]
+        self.output = self.state[mempos]
 
     def value(self, delta_to_read_position: int):
         position_of_value = self.state[self.current_read_position + delta_to_read_position]
@@ -41,31 +52,40 @@ class TuringMachine:
         return self.state[self.current_read_position + 3]
 
     def tick(self):
-        t = {1: lambda x, y: x + y,
-             2: lambda x, y: x * y,
-             }
-
         w = {1: instruction(opcode=1,
                             parametercount=3,
                             function=self.adding,
                             ),
              2: instruction(opcode=2,
                             parametercount=3,
-                            function=self.adding,
+                            function=self.multiplying,
+                            ),
+             3: instruction(opcode=3,
+                            parametercount=1,
+                            function=self.storeinput,
+                            ),
+             4: instruction(opcode=4,
+                            parametercount=1,
+                            function=self.getoutput,
                             ),
 
              }
-
+        print(f'my state {self.state}')
+        print(f"current read position is {self.current_read_position}")
+        print(f'my state {self.state}')
+        print(f'the self.operation is {self.operation()}')
+        print(f'my state {self.state}')
         i = w[self.operation()]
-        listie = self.state[self.operation(): i.parametercount + 1]
+        print(f'the operation is {i}')
+        start = self.current_read_position + 1
+        stop = start + i.parametercount
+        listie = self.state[start: stop]
+        print('this is listie')
+        print(listie)
         i.function(listie)
 
-        # parameters = self.state[self.operation(): i.parametercount]
-        #
-        # func = t[self.operation()]
-        # self.state[self.output_position()] = func(self.value(1), self.value(2))
-
-        self.current_read_position += (i.parametercount + 1)
+        self.current_read_position += (i.parametercount +1)
+     #   print(f"current read position is {self.current_read_position}")
 
     def continue_ticking(self) -> bool:
         return not self.operation() == 99
@@ -74,15 +94,22 @@ class TuringMachine:
         self.machine_input = machine_input
 
         while self.continue_ticking():
+            print(f'my state {self.state}')
+            print(f"current read position is {self.current_read_position}")
             self.tick()
 
-        return 19
+        return self.output
 
     def __str__(self):
         return f'{self.state} , {self.current_read_position}'
 
 
 if __name__ == '__main__':
+    s = [1, 1, 1, 4, 99, 5, 6, 0, 99]
+    e = TuringMachine(state=s)
+    e.run()
+    print(e.state)
+
     puzzle_input = [3, 225, 1, 225, 6, 6, 1100, 1, 238, 225, 104, 0, 1102, 57, 23, 224, 101, -1311, 224, 224, 4, 224,
                     1002, 223, 8, 223, 101, 6, 224, 224, 1, 223, 224, 223, 1102, 57, 67, 225, 102, 67, 150, 224, 1001,
                     224, -2613, 224, 4, 224, 1002, 223, 8, 223, 101, 5, 224, 224, 1, 224, 223, 223, 2, 179, 213, 224,

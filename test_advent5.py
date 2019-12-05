@@ -18,11 +18,7 @@ def test_turing_machine_add():
     assert e.state == [2, 0, 0, 0, 99]
 
 
-def test_turing_machine_multiply():
-    e = TuringMachine(state=[1, 0, 0, 0, 99])
-    e.run()
-    assert e.state == [2, 0, 0, 0, 99]
-
+def test_mult():
     assert turing([2, 3, 0, 3, 99]) == [2, 3, 0, 6, 99]
     assert turing([2, 4, 4, 5, 99, 0]) == [2, 4, 4, 5, 99, 9801]
 
