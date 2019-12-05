@@ -1,3 +1,4 @@
+import itertools
 from typing import List
 
 from collections import namedtuple
@@ -13,8 +14,36 @@ class TuringMachine:
         self.machine_input = None
         self.output = None
 
-    def operation(self):
+    def read_position_value(self):
         return self.state[self.current_read_position]
+
+    def current_operation(self):
+        w = {1: instruction(opcode=1,
+                            parametercount=3,
+                            function=self.adding,
+                            ),
+             2: instruction(opcode=2,
+                            parametercount=3,
+                            function=self.multiplying,
+                            ),
+             3: instruction(opcode=3,
+                            parametercount=1,
+                            function=self.storeinput,
+                            ),
+             4: instruction(opcode=4,
+                            parametercount=1,
+                            function=self.getoutput,
+                            ),
+
+             }
+        return w[self.operation()]
+
+    def operation(self):
+        value_at_read_position = self.state[self.current_read_position]
+        print(value_at_read_position)
+        o = abs(value_at_read_position) % 100  # to get the last 2 digits
+        print(o)
+        return o
 
     def adding(self, listie):
         mempos_value_1 = listie[0]
@@ -82,10 +111,29 @@ class TuringMachine:
         listie = self.state[start: stop]
         print('this is listie')
         print(listie)
-        i.function(listie)
+        i.function()
 
-        self.current_read_position += (i.parametercount +1)
-     #   print(f"current read position is {self.current_read_position}")
+        self.current_read_position += (i.parametercount + 1)
+
+    def parameters(self):
+        start = self.current_read_position + 1
+        stop = start + self.current_operation().parametercount
+        listie = self.state[start: stop]
+
+        a = itertools.zip_longest(listie, self.parameter_modes(), fillvalue=0)
+        e = list()
+        for w in a:
+            e.append(w)
+
+        return e
+
+    def parameter_modes(self):
+        a = str(self.read_position_value())[:-2]
+        b = a[::-1]
+
+        return [int(u) for u in b]
+
+    #   print(f"current read position is {self.current_read_position}")
 
     def continue_ticking(self) -> bool:
         return not self.operation() == 99
@@ -106,9 +154,14 @@ class TuringMachine:
 
 if __name__ == '__main__':
     s = [1, 1, 1, 4, 99, 5, 6, 0, 99]
-    e = TuringMachine(state=s)
+    state = [1002, 4, 3, 4, 33]
+    e = TuringMachine(state=state)
+
+    print(e.parameters())
+    print(e.operation())
     e.run()
-    print(e.state)
+
+    #
 
     puzzle_input = [3, 225, 1, 225, 6, 6, 1100, 1, 238, 225, 104, 0, 1102, 57, 23, 224, 101, -1311, 224, 224, 4, 224,
                     1002, 223, 8, 223, 101, 6, 224, 224, 1, 223, 224, 223, 1102, 57, 67, 225, 102, 67, 150, 224, 1001,

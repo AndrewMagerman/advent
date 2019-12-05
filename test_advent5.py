@@ -1,3 +1,5 @@
+import pytest
+
 from advent5 import TuringMachine
 
 
@@ -32,14 +34,30 @@ def test_input():
     assert t2([3, 0, 4, 0, 99], 100) == 100
 
 
+def test_mult1():
+    assert turing([1002, 4, 3, 4, 33]) == [2, 0, 0, 0, 99]
+
+@pytest.fixture
+def prep():
+    state = [1002, 4, 3, 4, 33]
+    return TuringMachine(state=state)
+
+def test_p(prep):
+    assert prep.operation() == 2
+
+def test_i(prep):
+    assert prep.parameter_modes() == [0, 1]
+
+def test_l(prep):
+    assert prep.parameters() == [(4, 0), (3, 1), (4, 0)]
+
+
 # def test_param():
 #     e = TuringMachine(state=[1, 0, 0, 0, 99])
 #     assert e.parameters_current_instruction() == [0, 0, 0]
 #
 #     e2 = TuringMachine(state=[1, 1, 2, 3, 99])
 #     assert e2.parameters_current_instruction() == [3, 2, 1]
-
-
 
 
 if __name__ == '__main__':
